@@ -1,0 +1,211 @@
+@import "tailwindcss";
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-muted: var(--muted);
+  --color-accent: var(--accent);
+  --color-accent-hover: var(--accent-hover);
+  --color-card: var(--card);
+  --color-card-soft: var(--card-soft);
+  --color-border: var(--border);
+  --font-cormorant: var(--font-cormorant);
+  --font-manrope: var(--font-manrope);
+}
+
+/* ---------- Design Tokens (Warm Editorial Light) ---------- */
+@layer tailwindUtilities {
+  :root {
+    --background: #FAF9F7;
+    --foreground: #1F1F1F;
+    --muted: #8A877E;
+    --accent: #C4A67A;
+    --accent-hover: #B8966A;
+    --accent-bright: #D4A574;
+    --surface: #FFFFFF;
+    --border: #E8E0D4;
+    --card: #FFFFFF;
+    --card-soft: #F4EFE7;
+  }
+
+  .dark {
+    --background: #0F0F0F;
+    --foreground: #F5F0E8;
+    --muted: #8A877E;
+    --accent: #C4A67A;
+    --accent-hover: #D8B885;
+    --accent-bright: #E8C89A;
+    --surface: #1A1A1A;
+    --border: #2A2A2A;
+    --card: #1A1A1A;
+    --card-soft: #252525;
+  }
+}
+
+/* ---------- Base ---------- */
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    margin: 0;
+    font-family: "Manrope", "Cormorant Garamond", sans-serif;
+    background: var(--background);
+    color: var(--foreground);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  ::selection {
+    background: #c4a67a;
+    color: #1f1f1f;
+  }
+
+  ::-webkit-scrollbar {
+    width: 8px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: #faf9f7;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: #c4a67a;
+    border-radius: 999px;
+  }
+
+  /* Reduced motion */
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0s !important;
+      transition-duration: 0s !important;
+    }
+  }
+}
+
+/* ---------- Typographic Scale (Cormorant Garamond + Geist) ---------- */
+@layer typography {
+  h1 { font-size: 4rem; line-height: 1.1; font-weight: 700; }
+  h2 { font-size: 3rem; line-height: 1.2; font-weight: 600; }
+  h3 { font-size: 2.25rem; line-height: 1.3; font-weight: 600; }
+  body { font-size: 1rem; line-height: 1.6; }
+
+  /* Eyebrow tag */
+  .eyebrow {
+    display: inline-block;
+    font-size: 0.65rem;
+    text-transform: uppercase;
+    letter-spacing: 0.3em;
+    color: var(--accent);
+    margin-bottom: 1rem;
+  }
+}
+
+/* ---------- Utility: center utility ---------- */
+@layer utilities {
+  .container {
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 0 1rem;
+  }
+
+  .section {
+    padding: clamp(4rem, 8vw, 6rem) 1rem;
+  }
+
+  .bg-cream { background: var(--card-soft); }
+  .bg-white { background: var(--card); }
+  .text-accent { color: var(--accent); }
+  .text-muted { color: var(--muted); }
+
+  /* Double-bezel pattern */
+  .card-shell {
+    position: relative;
+    border: 1px solid var(--border);
+    background: var(--card-soft);
+    border-radius: 2rem;
+    padding: 0.8rem;
+    min-height: 360px;
+    overflow: hidden;
+    display: flex;
+    width: 100%;
+    min-height: 300px;
+    transition: border-color 0.4s ease, box-shadow 0.4s ease;
+  }
+  @media (min-width: 768px) {
+    .card-shell { min-height: 360px; }
+  }
+  .card-inner {
+    position: relative;
+    flex: 1;
+    border-radius: calc(2rem - 0.8rem);
+    overflow: hidden;
+  }
+
+  /* Ambient gradient shift (replaces 3D model in hero) */
+  .hero-ambient {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(120px);
+    opacity: 0.5;
+    animation: heroOrb 14s ease-in-out infinite alternate;
+  }
+  .hero-ambient.a { width: 34rem; height: 34rem; left: 10%; top: 18%; background: radial-gradient(circle at 30% 30%, #C4A67A, #6B4A2E 70%); }
+  .hero-ambient.b { width: 28rem; height: 28rem; right: 8%; top: 8%; background: radial-gradient(circle at 40% 40%, #D8B885, #3A2A1A 70%); animation-delay: -7s; }
+  .hero-ambient.c { width: 24rem; height: 24rem; left: 40%; bottom: -4%; background: radial-gradient(circle at 50% 50%, #E8C89A, #2A2A2A 70%); animation-delay: -4s; }
+
+  @keyframes heroOrb {
+    0% { transform: translate(0, 0) scale(1); }
+    100% { transform: translate(4%, -3%) scale(1.08); }
+  }
+
+  /* Magnetic button */
+  .magnetic {
+    position: relative;
+    isolation: isolate;
+  }
+  .magnetic::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    background: currentColor;
+    opacity: 0;
+    z-index: -1;
+    transition: opacity 0.3s cubic-bezier(0.32, 0.72, 0, 1);
+  }
+  .magnetic:hover::after { opacity: 0.08; }
+
+  /* Scroll reveal */
+  .reveal {
+    opacity: 0;
+    transform: translateY(28px);
+    transition: opacity 700ms cubic-bezier(0.32, 0.72, 0, 1),
+                transform 700ms cubic-bezier(0.32, 0.72, 0, 1);
+  }
+  .reveal.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  /* Staggered children reveal */
+  .reveal-children > * {
+    opacity: 0;
+    transform: translateY(18px);
+    transition: opacity 500ms cubic-bezier(0.32, 0.72, 0, 1),
+                transform 500ms cubic-bezier(0.32, 0.72, 0, 1);
+  }
+  .reveal-children.visible > * {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  .reveal-children.visible > *:nth-child(1) { transition-delay: 0ms; }
+  .reveal-children.visible > *:nth-child(2) { transition-delay: 70ms; }
+  .reveal-children.visible > *:nth-child(3) { transition-delay: 140ms; }
+  .reveal-children.visible > *:nth-child(4) { transition-delay: 210ms; }
+  .reveal-children.visible > *:nth-child(5) { transition-delay: 280ms; }
+  .reveal-children.visible > *:nth-child(6) { transition-delay: 350ms; }
+}
